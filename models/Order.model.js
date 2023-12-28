@@ -11,16 +11,7 @@ const orderSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cafe",
   },
-  courierId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Courier",
-  },
-  // Пока как идея проверки принятия или отклонения заказа
- 
-  //-------------------------------------------------------
   total: Number,
-  from: String,
-  to: String,
   status: String,
   recievedAt: String
 });

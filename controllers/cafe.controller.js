@@ -45,6 +45,7 @@ module.exports.cafeController = {
             });
             res.status(200).json("Кафе создано");
         } catch (e) {
+            console.log("Ошибка");
             res.status(400).json({ error: e.toString() });
         }
     },

@@ -2,7 +2,6 @@ const multer = require("multer");
 const dayjs = require("dayjs");
 
 
-console.log(dayjs().format('DDMMYYYY-HHmmss_SSS'));
 const storage = multer.diskStorage({
     destination(req, file, callback) {
         callback(null, "files/");

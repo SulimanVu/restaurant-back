@@ -1,5 +1,4 @@
 const Cafe = require("../models/Cafe.model");
-const Courier = require("../models/Courier.model");
 const Client = require("../models/Client.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -11,9 +10,6 @@ module.exports.signinController = {
       let candidate;
       candidate = await Cafe.findOne({ mail });
 
-      if (!candidate) {
-        candidate = await Courier.findOne({ mail });
-      }
       if (!candidate) {
         candidate = await Client.findOne({ mail });
       }
