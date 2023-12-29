@@ -9,7 +9,17 @@ router.get("/", cafeController.getAllCafe);
 router.post("/signup", cafeController.signUpCafe);
 router.delete("/:id", authMiddleware, cafeController.deleteCafe);
 router.get("/:id", cafeController.getOneCafeById);
+
 router.patch("/edit/:id", uploadImages.single('image'), cafeController.editCafe);
 router.get("/profile/user", authMiddleware, cafeController.getCafeByToken)
+
+router.patch(
+  "/edit/:id",
+  authMiddleware,
+  uploadImages.single("image"),
+  cafeController.editCafe
+);
+router.get("/profile/user", authMiddleware, cafeController.getCafeByToken);
+
 
 module.exports = router;
