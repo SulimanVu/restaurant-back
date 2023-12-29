@@ -21,6 +21,12 @@ const clientSchema = mongoose.Schema({
     type: String,
     default: "client",
   },
+  basket: [
+    {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Food",
+    },
+  ],
 });
 
 const Client = mongoose.model("Client", clientSchema);

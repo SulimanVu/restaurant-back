@@ -14,10 +14,10 @@ module.exports.clientController = {
 
   getOneClient: async (req, res) => {
     try {
-      const client = await Client.findById(req.params.id);
-      res.json(client)
+      const client = await Client.findById(req.params.id).populate("basket");
+      res.json(client);
     } catch (err) {
-      res.json(500).json(err)
+      res.json(500).json(err);
     }
   },
 
@@ -39,7 +39,7 @@ module.exports.clientController = {
         city,
         address,
         mail,
-        password: hash
+        password: hash,
       });
       res.status(200).json("Клиент добавлен");
     } catch (e) {
@@ -47,12 +47,24 @@ module.exports.clientController = {
     }
   },
   getClientByToken: async (req, res) => {
-    const clientId = req.user.cafeId
+    const clientId = req.user.cafeId;
     try {
       const clientCurrent = await Client.findById(clientId);
       res.json(clientCurrent);
     } catch (e) {
-      res.json({error: e.toString()})
+      res.json({ error: e.toString() });
     }
-  }
+  },
+  updateBasket: async (req, res) => {
+    try {
+      const updatedClient = await Client.findByIdAndUpdate(req.params.id, {
+        $set: { basket: req.body.basket },
+      }).populate("basket");
+
+      const result = await updatedClient;
+      res.json(result);
+    } catch (e) {
+      res.json({ error: e.toString() });
+    }
+  },
 };

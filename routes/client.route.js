@@ -11,5 +11,6 @@ router.post("/signup", clientController.signUpClient);
 // router.post("/signin", clientController.signIn);
 router.delete("/", authMiddleware, clientController.deleteClient);
 router.get("/profile/user", authMiddleware, clientController.getClientByToken);
+router.patch('/basket/:id', clientController.updateBasket)
 
 module.exports = router;
