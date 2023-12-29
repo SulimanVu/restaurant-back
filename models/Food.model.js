@@ -5,15 +5,16 @@ const foodSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  image: {
-    type: String,
-    default:
-      "files\\defaultfood.jpg",
-  },
+  image: [
+    {
+      type: String,
+      // default: "files\\defaultfood.jpg",
+    },
+  ],
   info: String,
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
+    ref: "Category",
     required: false,
   },
   price: {
@@ -22,8 +23,8 @@ const foodSchema = mongoose.Schema({
   },
   cafeId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Cafe'
-  }
+    ref: "Cafe",
+  },
 });
 
 const Food = mongoose.model("Food", foodSchema);

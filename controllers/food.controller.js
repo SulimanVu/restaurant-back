@@ -10,13 +10,21 @@ module.exports.foodController = {
       res.json({ error: e.toString() });
     }
   },
+  getOneFood: async (req, res) => {
+    try {
+      const allFood = await Food.findOne();
+      res.status(200).json(allFood);
+    } catch (e) {
+      res.json({ error: e.toString() });
+    }
+  },
   getFoodByCafeId: async (req, res) => {
     const { cafeId } = req.body;
 
     try {
       const foodByCafe = await Cafe.findById(cafeId);
       console.log(foodByCafe);
-      return foodByCafe.menu
+      return foodByCafe.menu;
       // res.json(foodByCafeId)
     } catch (e) {
       res.json({ error: e.toString() });
@@ -24,15 +32,17 @@ module.exports.foodController = {
   },
   createFood: async (req, res) => {
     const { name, info, categoryId, price } = req.body;
+
     try {
       const newFood = await Food.create({
         name,
-        image: req.file ? req.file.path : "",
+        image: req.files.map((file) => file.path), // Массив путей к изображениям
         info,
         categoryId,
         price,
-        cafeId: req.user.cafeId
+        cafeId: req.user.cafeId,
       });
+
       res.status(200).json(newFood);
     } catch (e) {
       res.status(400).json({ error: e.toString() });
@@ -50,35 +60,49 @@ module.exports.foodController = {
   //Получение еды по категории(без не обходимости не менять):
   getFoodByCategoryId: async (req, res) => {
     try {
-      const foodByCategoryId = await Cafe.find({categoryId: req.params.id});
-      res.json(foodByCategoryId)
+      const foodByCategoryId = await Cafe.find({ categoryId: req.params.id });
+      res.json(foodByCategoryId);
     } catch (e) {
       res.json({ error: e.toString() });
     }
   },
   getFoodByCafeToken: async (req, res) => {
-    const cafeId = req.user.cafeId
+    const cafeId = req.user.cafeId;
     try {
-      const foodByCafeToken = await Food.find({cafeId: cafeId});
-      res.json(foodByCafeToken)
+      const foodByCafeToken = await Food.find({ cafeId: cafeId });
+      res.json(foodByCafeToken);
     } catch (e) {
       res.json({ error: e.toString() });
     }
   },
   editFood: async (req, res) => {
-    const {cafeId} = req.user;
-    const {foodId} = req.body
-    console.log(req.body)
+    const { cafeId } = req.user;
+    const { foodId } = req.body;
+
     try {
-      const currentFood = await Food.find({foodId})
-      const editedFood = await Food.findByIdAndUpdate(foodId, {
+      // Получите текущую еду
+      const currentFood = await Food.findById(foodId);
+
+      // Обновите только те поля, которые переданы в запросе
+      const updatedFields = {
         ...req.body,
         cafeId,
-        image: req.file ? req.file.path : currentFood.image
+        image:
+          req.files.length > 0
+            ? req.files[0].path
+            : currentFood
+            ? currentFood.image
+            : "",
+      };
+
+      // Обновите блюдо по foodId
+      const editedFood = await Food.findByIdAndUpdate(foodId, updatedFields, {
+        new: true,
       });
+
       res.json(editedFood);
     } catch (e) {
-      res.json({error: e.toString()})
+      res.json({ error: e.toString() });
     }
   },
 };

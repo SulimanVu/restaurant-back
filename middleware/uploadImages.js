@@ -21,8 +21,4 @@ const filefilter = (req, file, callback) => {
   }
 };
 
-const limits = {
-  filesize: 1024 * 1024 * 5,
-};
-
-module.exports = multer({ storage, filefilter, limits });
+module.exports = multer({ storage, filefilter });
