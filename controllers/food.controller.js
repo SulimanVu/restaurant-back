@@ -10,6 +10,14 @@ module.exports.foodController = {
       res.json({ error: e.toString() });
     }
   },
+  getOneFood: async (req, res) => {
+    try {
+      const allFood = await Food.findOne();
+      res.status(200).json(allFood);
+    } catch (e) {
+      res.json({ error: e.toString() });
+    }
+  },
   getFoodByCafeId: async (req, res) => {
     const { cafeId } = req.body;
 
