@@ -50,25 +50,32 @@ module.exports.cafeController = {
         }
     },
     editCafe: async (req, res) => {
-      const cafeId = req.user.cafeId;
-      try {
-        const currentCafe = await Cafe.find({cafeId})
-        const editedCafe = await Cafe.findByIdAndUpdate(cafeId, {
-          ...req.body,
-          image: req.file ? req.file.path : currentCafe.image
-        });
-        res.json(editedCafe);
-      } catch (e) {
-        res.json({error: e.toString()})
-      }
+        const cafeId = req.params.id;
+        console.log(req.body);
+        try {
+            const currentCafe = await Cafe.find({ cafeId })
+            const sdf = await Cafe.findById(cafeId)
+            console.log(sdf)
+
+            const editedCafe = await Cafe.findByIdAndUpdate(cafeId,
+                {
+                    $push: {
+                        orders: [req.body]
+                    },
+                    image: req.file ? req.file.path : currentCafe.image
+                }, { new: true });
+            res.json(editedCafe);
+        } catch (e) {
+            res.json({ error: e.toString() })
+        }
     },
     getCafeByToken: async (req, res) => {
-      const cafeId = req.user.cafeId;
-      try {
-        const cafeCurrent = await Cafe.findById(cafeId);
-        res.json(cafeCurrent);
-      } catch (e) {
-        res.json({error: e.toString()})
-      }
+        const cafeId = req.user.cafeId;
+        try {
+            const cafeCurrent = await Cafe.findById(cafeId);
+            res.json(cafeCurrent);
+        } catch (e) {
+            res.json({ error: e.toString() })
+        }
     }
 };

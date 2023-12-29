@@ -33,6 +33,16 @@ const cafeSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Food"
     }
+  ],
+  orders: [
+    {
+      client: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Client'
+      },
+      date: String,
+      qtity: Number
+    }
   ]
 });
 
