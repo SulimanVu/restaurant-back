@@ -45,6 +45,7 @@ module.exports.signinController = {
         password,
         Number(process.env.BCRYPT_ROUNDS)
       );
+
       const user = await Client.create({
         name,
         phone,
@@ -53,6 +54,7 @@ module.exports.signinController = {
         mail,
         password: hash,
       });
+
       res.json(user);
     } catch (e) {
       res.json({ error: e });

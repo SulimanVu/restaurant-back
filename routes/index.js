@@ -9,7 +9,7 @@ router.use("/categories", require("./category.route"));
 router.use("/orders", require("./order.route"));
 router.use("/ordered", require("./order.route"));
 router.use("/clients", require("./client.route"));
-
+router.use("/stripe", require("./stripe.route"));
 router.use(require("./signin.route"));
 
 module.exports = router;
