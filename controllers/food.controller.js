@@ -1,3 +1,4 @@
+const Cafe = require("../models/Cafe.model");
 const Food = require("../models/Food.model");
 
 module.exports.foodController = {
@@ -11,8 +12,12 @@ module.exports.foodController = {
   },
   getFoodByCafeId: async (req, res) => {
     const { cafeId } = req.body;
+
     try {
-      const foodByCafeId = await Food.findById(req.body.id);
+      const foodByCafe = await Cafe.findById(cafeId);
+      console.log(foodByCafe);
+      return foodByCafe.menu
+      // res.json(foodByCafeId)
     } catch (e) {
       res.json({ error: e.toString() });
     }
@@ -45,7 +50,7 @@ module.exports.foodController = {
   //Получение еды по категории(без не обходимости не менять):
   getFoodByCategoryId: async (req, res) => {
     try {
-      const foodByCategoryId = await Food.find({categoryId: req.params.id});
+      const foodByCategoryId = await Cafe.find({categoryId: req.params.id});
       res.json(foodByCategoryId)
     } catch (e) {
       res.json({ error: e.toString() });
