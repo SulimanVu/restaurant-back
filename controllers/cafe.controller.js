@@ -29,6 +29,53 @@ module.exports.cafeController = {
   },
   signUpCafe: async (req, res) => {
     const { name, phone, city, address, mail, password } = req.body;
+        const hash = await bcrypt.hash(
+            password,
+            Number(process.env.BCRYPT_ROUNDS)
+        );
+        try {
+            await Cafe.create({
+                name,
+                phone,
+                city,
+                address,
+                mail,
+                password: hash,
+            });
+            res.status(200).json("Кафе создано");
+        } catch (e) {
+            console.log("Ошибка");
+            res.status(400).json({ error: e.toString() });
+        }
+    },
+    editCafe: async (req, res) => {
+        const cafeId = req.params.id;
+        console.log(req.body);
+        try {
+            const currentCafe = await Cafe.find({ cafeId })
+            const sdf = await Cafe.findById(cafeId)
+            console.log(sdf)
+
+            const editedCafe = await Cafe.findByIdAndUpdate(cafeId,
+                {
+                    $push: {
+                        orders: [req.body]
+                    },
+                    image: req.file ? req.file.path : currentCafe.image
+                }, { new: true });
+            res.json(editedCafe);
+        } catch (e) {
+            res.json({ error: e.toString() })
+        }
+    },
+    getCafeByToken: async (req, res) => {
+        const cafeId = req.user.cafeId;
+        try {
+            const cafeCurrent = await Cafe.findById(cafeId);
+            res.json(cafeCurrent);
+        } catch (e) {
+            res.json({ error: e.toString() })
+        }
 
     const hash = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS));
     try {
@@ -65,6 +112,7 @@ module.exports.cafeController = {
       res.json(cafeCurrent);
     } catch (e) {
       res.json({ error: e.toString() });
+
     }
   },
 };
